@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/head :: head('Pizzas')}" />
+
+<body>
+
+
+    <!-- header -->
+    <header>
+
+        <section th:replace="~{fragments/navbar :: navbar}" />
+
+    </header>
+
+
+    <!-- main -->
+    <main class="container">
+        <section class="title row">
+            <div class="col-12">
+                <h1 class="text-center">
+                    Pizzas
+                </h1>
+            </div>
+        </section>
+
+        <section class="search-bar row justify-content-center">
+            <form th:action="@{/pizzas}" method="GET" class="col-8 d-inline">
+                <div class="input-group">
+                    <input type="search" name="keyword" id="pizza-search-input" class="form-control">
+                    <button class="btn btn-success btn-lg" type="submit">Filter</button>
+                </div>
+            </form>
+
+            <div class="buttons col-2">
+                <a th:href="@{/pizzas/create}" class="btn btn-danger btn-lg ">Add new Pizza</a>
+            </div>
+
+        </section>
+
+        <section class="pizzas">
+            <table class="table table-hover" th:if="${pizzas.size() > 0}">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pizza : ${pizzas}" th:object="${pizza}">
+                        <td>[[*{id}]]</td>
+                        <td>[[*{name}]]</td>
+                        <td>[[*{description}]]</td>
+                        <td>[[*{price}]]</td>
+                        <td>
+                            <a th:href="@{|/pizzas/*{id}|}" class="btn btn-success btn-sm ">More details</a>
+                            <a th:href="@{|/pizzas/edit/*{id}|}" class="btn btn-light btn-sm ">Edit</a>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="d-inline btn btn-danger btn-sm" data-bs-toggle="modal"
+                                th:data-bs-target="'#delete-modal-' + *{id}">
+                                Delete
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:id="'delete-modal-' + *{id}" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deleting [[*{name}]]
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Deleting <strong>[[*{name}]]</strong> from the database, are you sure you want to proceed?
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Go
+                                                back</button>
+                                            <form th:action="@{|/pizzas/delete/*{id}|}" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 th:unless="${pizzas.size() > 0}">
+
+                <h1 class="text-center text-danger">there are no pizzas available at this time</h1>
+
+            </h2>
+
+        </section>
+    </main>
+
+
+    <!-- footer -->
+    <footer>
+
+
+    </footer>
+
+
+    <script th:replace="~{fragments/popper :: popper}" />
+</body>
+
+</html>
