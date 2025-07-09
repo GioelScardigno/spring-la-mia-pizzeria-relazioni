@@ -56,8 +56,9 @@
                         <td>[[*{description}]]</td>
                         <td>[[*{price}]]</td>
                         <td>
-                            <a th:href="@{|/pizzas/*{id}|}" class="btn btn-success btn-sm ">More details</a>
-                            <a th:href="@{|/pizzas/edit/*{id}|}" class="btn btn-light btn-sm ">Edit</a>
+                            <a th:href="@{|/pizzas/*{id}/offer|}" class="btn btn-success btn-sm ">Add special offer</a>
+                            <a th:href="@{|/pizzas/*{id}|}" class="btn btn-outline-dark btn-sm ">More details</a>
+                            <a th:href="@{|/pizzas/edit/*{id}|}" class="btn btn-outline-dark btn-sm ">Edit</a>
 
                             <!-- Button trigger modal -->
                             <button type="button" class="d-inline btn btn-danger btn-sm" data-bs-toggle="modal"

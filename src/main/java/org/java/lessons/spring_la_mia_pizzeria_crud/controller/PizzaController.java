@@ -1,10 +1,15 @@
 package org.java.lessons.spring_la_mia_pizzeria_crud.controller;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
+import org.java.lessons.spring_la_mia_pizzeria_crud.model.Offer;
 import org.java.lessons.spring_la_mia_pizzeria_crud.model.Pizza;
+import org.java.lessons.spring_la_mia_pizzeria_crud.repo.OfferRepository;
 import org.java.lessons.spring_la_mia_pizzeria_crud.repo.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 
@@ -23,6 +29,9 @@ public class PizzaController {
 
     @Autowired
     private PizzaRepository pizzaRepository;
+
+    @Autowired
+    private OfferRepository offerRepository;
 
     @GetMapping
     public String index(Model model, @RequestParam(name = "keyword", required = false) String keyword) {
@@ -104,9 +113,32 @@ public class PizzaController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id, Model model){
 
-        pizzaRepository.deleteById(id);
+        Pizza pizzaToDelete = pizzaRepository.findById(id).get();
+        for (Offer offer : pizzaToDelete.getOffers()) {
+            offerRepository.delete(offer);
+        }
+
+        pizzaRepository.delete(pizzaToDelete);;
 
         return "redirect:/pizzas";
+
+    }
+
+    @GetMapping("/{id}/offer")
+    public String offer(@PathVariable("id") Integer id, Model model){
+
+        Optional<Pizza> pizzaOptional = pizzaRepository.findById(id);
+        if (pizzaOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no pizza with id" + id);
+        }
+
+        model.addAttribute("pizza", pizzaOptional.get());
+        Offer offer = new Offer();
+        offer.setPizza(pizzaOptional.get());
+        offer.setOfferStartDate(LocalDate.now());;
+        model.addAttribute("offer", offer);
+
+        return "offers/create";
 
     }
 }

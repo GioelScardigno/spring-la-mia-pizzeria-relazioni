@@ -19,36 +19,15 @@
         <section class="title row">
             <div class="col-12">
                 <h1 class="text-center">
-                    Details
+                    Special offers
                 </h1>
             </div>
         </section>
 
-        <section class="pizzas row justify-content-center mb-3" th:object="${pizza}">
-            <article class="col-6 card">
-                <img th:src="*{photo}" class="card-img-top w-25" alt="...">
-                <div class="card-body">
-                    <h1 class="card-title">
-                        [[*{name}]]
-                    </h1>
-                </div>
-                <div class="card-footer">
-                    <ul th:object="${pizza}">
-                        <li>Id: [[*{id}]]</li>
-                        <li>Description: [[*{description}]]</li>
-                        <li>Price: $[[*{price}]]</li>
-                    </ul>
-                </div>
-            </article>
-
-        </section>
-
-        <h1 class="text-center mb-3" th:if="${pizza.offers.size() > 0}">-Special offes-</h1>
-
         <section class="offers row">
 
             <section class="pizzas">
-                <table class="col-12 table table-hover" th:if="${pizza.offers.size() > 0}">
+                <table class="col-12 table table-hover" th:if="${offers.size() > 0}">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -59,7 +38,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="offer : ${pizza.offers}" th:object="${offer}">
+                        <tr th:each="offer : ${offers}" th:object="${offer}">
                             <td>[[*{id}]]</td>
                             <td>[[*{title}]]</td>
                             <td>[[*{offerStartDate}]]</td>
@@ -82,7 +61,7 @@
                                             <div class="modal-header">
                                                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Deleting special
                                                     offer for
-                                                    [[${pizza.name}]]
+                                                    [[${offer.pizza.name}]]
                                                 </h1>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -110,15 +89,11 @@
                     </tbody>
                 </table>
 
-                <h2 th:unless="${pizza.offers.size() > 0}">
+                <h2 th:unless="${offers.size() > 0}">
 
-                    <h5 class="text-center text-secondary">No special offers for this pizza at this time</h5>
+                    <h5 class="text-center text-secondary">No special offers at this time</h5>
 
                 </h2>
-
-                <div class="d-flex justify-content-center">
-                    <a th:href="@{/pizzas}" class="btn btn-danger">Go back</a>
-                </div>
 
             </section>
 

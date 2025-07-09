@@ -1,11 +1,14 @@
 package org.java.lessons.spring_la_mia_pizzeria_crud.model;
 
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -32,6 +35,20 @@ public class Pizza {
     @Min(1)
     @Max(99)
     private Double price;
+
+
+    @OneToMany(mappedBy = "pizza")
+    private List<Offer> offers;
+    
+
+    public List<Offer> getOffers() {
+        return this.offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
+
 
     public Integer getId() {
         return this.id;
