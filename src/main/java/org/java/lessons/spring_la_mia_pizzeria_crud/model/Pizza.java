@@ -1,13 +1,16 @@
 package org.java.lessons.spring_la_mia_pizzeria_crud.model;
 
-
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
@@ -39,6 +42,23 @@ public class Pizza {
 
     @OneToMany(mappedBy = "pizza")
     private List<Offer> offers;
+
+
+    @ManyToMany
+    @JoinTable(
+        name = "ingredient_pizza",
+        joinColumns = @JoinColumn(name = "pizza_id"),
+        inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    private Set<Ingredient> ingredients;
+
+    public Set<Ingredient> getIngredients() {
+        return this.ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
     
 
     public List<Offer> getOffers() {

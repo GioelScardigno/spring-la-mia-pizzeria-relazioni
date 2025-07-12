@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/head :: head('ingredients')}" />
+
+<body>
+
+
+    <!-- header -->
+    <header>
+
+        <section th:replace="~{fragments/navbar :: navbar}" />
+
+    </header>
+
+
+    <!-- main -->
+    <main class="container">
+        <section class="title row">
+            <div class="col-12">
+                <h1 class="text-center">
+                    Ingredients
+                </h1>
+            </div>
+        </section>
+
+        <section class="search-bar row justify-content-center mb-3">
+            <div class="col-12 d-flex justify-content-center">
+                <div class="creation-button">
+                    <a th:href="@{/ingredients/create}" class="btn btn-danger btn-lg ">Add ingredient</a>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="ingredients">
+            <table class="table table-hover" th:if="${ingredients.size() > 0}">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Contained in</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ingredient : ${ingredients}" th:object="${ingredient}">
+                        <td>[[*{id}]]</td>
+                        <td>[[*{name}]]</td>
+                        <td>[[*{description}]]</td>
+                        <td>[[*{pizzas.size()}]] Pizzas</td>
+                        <td>
+                            <a th:href="@{|/ingredients/*{id}|}" class="btn btn-success btn-sm ">More details</a>
+                            <a th:href="@{|/ingredients/*{id}/edit|}" class="btn btn-outline-dark btn-sm ">Edit</a>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="d-inline btn btn-danger btn-sm" data-bs-toggle="modal"
+                                th:data-bs-target="'#delete-modal-' + *{id}">
+                                Delete
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:id="'delete-modal-' + *{id}" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deleting [[*{name}]]
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Deleting <strong>[[*{name}]]</strong> from the database, are you sure
+                                                you want to proceed?
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Go
+                                                back</button>
+                                            <form th:action="@{|/ingredients/delete/*{id}|}" method="post"
+                                                class="d-inline">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 th:unless="${ingredients.size() > 0}">
+
+                <h1 class="text-center text-danger">there are no ingredients available at this time</h1>
+
+            </h2>
+
+        </section>
+    </main>
+
+
+    <!-- footer -->
+    <footer>
+
+
+    </footer>
+
+
+    <script th:replace="~{fragments/popper :: popper}" />
+</body>
+
+</html>

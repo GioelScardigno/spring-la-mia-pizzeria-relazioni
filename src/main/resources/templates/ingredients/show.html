@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/head :: head('Ingredient drtails')}" />
+
+<body>
+
+
+    <!-- header -->
+    <header>
+
+        <section th:replace="~{fragments/navbar :: navbar}" />
+
+    </header>
+
+
+    <!-- main -->
+    <main class="container">
+        <section class="title row">
+            <div class="col-12">
+                <h1 class="text-center">
+                    Ingredient details
+                </h1>
+            </div>
+        </section>
+
+        <section class="pizzas row justify-content-center mb-3" th:object="${ingredient}">
+            <article class="col-8 card">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        [[*{name}]]
+                    </h1>
+                    <h2 class="card-subtitle">
+                        Contained in [[*{pizzas.size()}]] pizzas
+                    </h2>
+                </div>
+                <div class="card-footer">
+                    <p>
+                        [[*{description}]]
+                    </p>
+                </div>
+            </article>
+
+        </section>
+
+        <section class="ingredient row justify-content-center mb-3">
+            <div class="col-8">
+
+                <table class="table table-hover" th:if="${ingredient.pizzas.size() > 0}">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="pizza : ${ingredient.pizzas}" th:object="${pizza}">
+                            <td>[[*{id}]]</td>
+                            <td>
+                                <a th:href="@{|/pizzas/*{id}|}">
+                                    [[*{name}]]
+                                </a>
+                            </td>
+                            <td>[[*{description}]]</td>
+                            <td>[[*{price}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 th:unless="${ingredient.pizzas.size() > 0}">
+
+                    <h1 class="text-center text-danger">there are no pizzas available at this time</h1>
+
+                </h2>
+
+            </div>
+        </section>
+
+        <div class="d-flex justify-content-center">
+            <a th:href="@{/ingredients}" class="btn btn-danger">Go back</a>
+        </div>
+        
+    </main>
+
+
+    <!-- footer -->
+    <footer>
+
+
+    </footer>
+
+
+    <script th:replace="~{fragments/popper :: popper}" />
+</body>
+
+</html>
